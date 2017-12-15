@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends Fragmen
 
     private WaitThread mWaitThread;
 
+    @LayoutRes
     protected abstract int getLayoutId();
 
     protected Class<VM> getViewModelClass() {return null;}

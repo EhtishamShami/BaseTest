@@ -35,8 +35,8 @@ ext {
             rxJava2                     : "io.reactivex.rxjava2:rxjava:${rxJava2}",
             rxAndroid                   : "io.reactivex.rxjava2:rxandroid:${rxAndroid}",
 
-            dagger2Compiler             : "com.google.dagger:dagger-compiler:${dagger2}",
             dagger2                     : "com.google.dagger:dagger:${dagger2}",
+            dagger2Compiler             : "com.google.dagger:dagger-compiler:${dagger2}",
 
             supportAppCompatV7          : "com.android.support:appcompat-v7:${supportLibrary}",
             supportDesign               : "com.android.support:design:${supportLibrary}",

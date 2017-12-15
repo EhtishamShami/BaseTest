@@ -57,6 +57,10 @@ dependencies {
     api commonDependencies.dagger2
     annotationProcessor commonDependencies.dagger2Compiler
 
+    // Rx
+    api commonDependencies.rxJava2
+    api commonDependencies.rxAndroid
+
     // Testing
     testImplementation commonTestDependencies.junit
     androidTestImplementation commonTestDependencies.runner

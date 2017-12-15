@@ -10,6 +10,7 @@ import android.databinding.ViewDataBinding;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -56,6 +57,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends Activit
 
     private ConfirmDialog mConfirmDialog;
 
+    @LayoutRes
     protected abstract int getLayoutId();
 
     protected Class<VM> getViewModelClass() {
