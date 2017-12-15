@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Common Base</string>
+
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="success">Success</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+</resources>

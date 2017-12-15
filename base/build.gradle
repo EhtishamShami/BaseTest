@@ -1,0 +1,71 @@
+apply plugin: 'com.android.feature'
+
+android {
+
+    def androidVersions = rootProject.ext.android
+
+    compileSdkVersion androidVersions.compileSdkVersion
+
+
+    baseFeature true
+
+    defaultConfig {
+        minSdkVersion androidVersions.minSdkVersion
+        targetSdkVersion androidVersions.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    def commonDependencies = rootProject.ext.commonDependencies
+    def developmentDependencies = rootProject.ext.developmentDependencies
+    def commonTestDependencies = rootProject.ext.commonTestDependencies
+
+    // Android
+    api commonDependencies.supportAppCompatV7
+    api commonDependencies.constraintLayout
+    api commonDependencies.supportRecyclerView
+
+    // Architecture Components
+    api commonDependencies.archLifecycleExtensions
+
+    // Dagger 2
+    api commonDependencies.dagger2
+    annotationProcessor commonDependencies.dagger2Compiler
+
+    // Testing
+    testImplementation commonTestDependencies.junit
+    androidTestImplementation commonTestDependencies.runner
+    androidTestImplementation commonTestDependencies.espresso
+
+    // Leak Canary
+    debugImplementation developmentDependencies.leakcanary
+    releaseImplementation developmentDependencies.leakcanaryNoOp
+    testImplementation developmentDependencies.leakcanaryNoOp
+
+    application project(':app')
+}
