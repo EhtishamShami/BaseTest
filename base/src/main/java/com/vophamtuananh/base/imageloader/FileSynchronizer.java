@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 final class FileSynchronizer {
 
-    private static final Map<String, Object> mProcessingFiles = new ConcurrentHashMap<>();
+    private static Map<String, Object> mProcessingFiles = new ConcurrentHashMap<>();
 
     FileSynchronizer() {
 
@@ -25,9 +25,6 @@ final class FileSynchronizer {
     void unRegisterProcess(String fileName) {
         synchronized (this) {
             if (mProcessingFiles.containsKey(fileName)) {
-                synchronized (mProcessingFiles.get(fileName)) {
-                    mProcessingFiles.get(fileName).notifyAll();
-                }
                 mProcessingFiles.remove(fileName);
             }
         }
@@ -36,18 +33,6 @@ final class FileSynchronizer {
     boolean isProcessing(String fileName) {
         synchronized (this) {
             return mProcessingFiles.containsKey(fileName);
-        }
-    }
-
-    void waitUtilFileReleased(String fileName) {
-        synchronized (this) {
-            if (mProcessingFiles.containsKey(fileName)) {
-                try {
-                    mProcessingFiles.get(fileName).wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }

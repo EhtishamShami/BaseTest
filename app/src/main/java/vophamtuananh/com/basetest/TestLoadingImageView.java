@@ -1,6 +1,7 @@
 package vophamtuananh.com.basetest;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
@@ -25,6 +26,16 @@ public class TestLoadingImageView extends AppCompatImageView implements LoadingI
 
     public TestLoadingImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public void setResourceId(int resourceId) {
+        setImageResource(resourceId);
+    }
+
+    @Override
+    public void setDrawable(Drawable drawable) {
+        setImageDrawable(drawable);
     }
 
     @Override

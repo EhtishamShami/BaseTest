@@ -2,12 +2,12 @@ package com.vophamtuananh.base.imageloader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.vophamtuananh.base.utils.BitmapUtil;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -17,15 +17,15 @@ import java.net.URL;
 
 public class LoadImageRunnable implements Runnable {
 
-    private static FileCacher mFileCacher;
-
     private static final Object object = new Object();
 
-    private WeakReference<LoadCallback> mLoadCallbackWeakReference;
+    private static FileCacher mFileCacher;
 
-    private ImageHolder mImageHolder;
+    private LoadCallback mLoadCallback;
 
-    LoadImageRunnable(Context context, ImageHolder imageHolder, LoadCallback loadCallback) {
+    private LoadInformationKeeper mLoadInformationKeeper;
+
+    LoadImageRunnable(Context context, LoadInformationKeeper loadInformationKeeper, LoadCallback loadCallback) {
         if (mFileCacher == null) {
             synchronized (object) {
                 if (mFileCacher == null) {
@@ -33,42 +33,50 @@ public class LoadImageRunnable implements Runnable {
                 }
             }
         }
-        mLoadCallbackWeakReference = new WeakReference<>(loadCallback);
-        mImageHolder = imageHolder;
+        mLoadCallback = loadCallback;
+        mLoadInformationKeeper = loadInformationKeeper;
 
     }
 
     @Override
     public void run() {
-        Bitmap bitmap = getBitmap(mImageHolder);
+        Bitmap bitmap = getBitmap(mLoadInformationKeeper);
 
-        if (Thread.currentThread().isInterrupted())
-            return;
-
-        LoadCallback loadCallback = mLoadCallbackWeakReference.get();
-
-        if (loadCallback == null)
-            return;
-
-        loadCallback.completed(mImageHolder, bitmap);
+        mLoadCallback.completed(mLoadInformationKeeper, bitmap);
     }
 
-    private Bitmap getBitmap(ImageHolder imageHolder) {
-        File file = mFileCacher.getFile(imageHolder.url);
+    private Bitmap getBitmap(LoadInformationKeeper loadInformationKeeper) {
+        File file = mFileCacher.getFile(loadInformationKeeper.url);
+        if (file == null)
+            return null;
+        try {
+            if (file.exists()) {
+                URL imageUrl = new URL(loadInformationKeeper.url);
+                HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+                conn.setConnectTimeout(10000);
+                conn.setReadTimeout(10000);
+                conn.setInstanceFollowRedirects(true);
+                long size = conn.getContentLength();
+                conn.disconnect();
+                if (file.length() < size) {
+                    file.delete();
+                }
+            }
+        } catch (Throwable ex) {}
 
         Bitmap bitmap = null;
-        if (file != null && file.exists())
-            bitmap = decodeFile(file, imageHolder);
+        if (file.exists())
+            bitmap = decodeFile(file, loadInformationKeeper);
 
         if (bitmap != null)
             return bitmap;
 
-        return fetchBitmap(file, imageHolder);
+        return fetchBitmap(file, loadInformationKeeper);
     }
 
-    private Bitmap fetchBitmap(File file, ImageHolder imageHolder) {
+    private Bitmap fetchBitmap(File file, LoadInformationKeeper loadInformationKeeper) {
         try {
-            URL imageUrl = new URL(imageHolder.url);
+            URL imageUrl = new URL(loadInformationKeeper.url);
 
             HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
             conn.setConnectTimeout(30000);
@@ -79,24 +87,26 @@ public class LoadImageRunnable implements Runnable {
             InputStream is = conn.getInputStream();
             mFileCacher.saveFile(is, file, size);
             conn.disconnect();
-            return decodeFile(file, imageHolder);
-        } catch (Throwable ex) {
-            file.deleteOnExit();
-            return null;
+            if (file.exists())
+                return decodeFile(file, loadInformationKeeper);
+        } catch (Exception ex) {
+            if (file.exists())
+                file.delete();
         }
+        return null;
     }
 
-    private Bitmap decodeFile(File file, ImageHolder imageHolder) {
-        Bitmap bitmap = BitmapUtil.getBitmapFromCachedFile(file, imageHolder.config);
-        switch (imageHolder.scaleType) {
+    private Bitmap decodeFile(File file, LoadInformationKeeper loadInformationKeeper) {
+        Bitmap bitmap = BitmapUtil.getBitmapFromCachedFile(file, loadInformationKeeper.config);
+        switch (loadInformationKeeper.scaleType) {
             case CROP:
-                return crop(bitmap, imageHolder.width, imageHolder.height);
+                return crop(bitmap, loadInformationKeeper.width, loadInformationKeeper.height);
             case CENTER_INSIDE:
-                return centerIndide(bitmap, imageHolder.width, imageHolder.height);
+                return centerIndide(bitmap, loadInformationKeeper.width, loadInformationKeeper.height);
             case SCALE_FULL_WIDTH:
-                return scaleFullWidth(bitmap, imageHolder.width);
+                return scaleFullWidth(bitmap, loadInformationKeeper.width);
             case SCALE_FULL_HEIGHT:
-                return scaleFullHeight(bitmap, imageHolder.height);
+                return scaleFullHeight(bitmap, loadInformationKeeper.height);
         }
 
         return bitmap;

@@ -8,9 +8,9 @@ import android.graphics.drawable.Drawable;
 
 public interface LoadingImageView {
 
-    void setImageResource(int resourceId);
+    void setResourceId(int resourceId);
 
-    void setImageDrawable(Drawable drawable);
+    void setDrawable(Drawable drawable);
 
     void showLoading();
 

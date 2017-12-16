@@ -1,4 +1,4 @@
-package vophamtuananh.com.basetest;
+package vophamtuananh.com.basetest.mainactivity;
 
 import javax.inject.Scope;
 

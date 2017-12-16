@@ -36,11 +36,6 @@ dependencies {
     def commonDependencies = rootProject.ext.commonDependencies
     def commonTestDependencies = rootProject.ext.commonTestDependencies
 
-    // Android
-    api commonDependencies.supportAppCompatV7
-    api commonDependencies.constraintLayout
-    api commonDependencies.supportRecyclerView
-
     // Architecture Components
     api commonDependencies.archLifecycleExtensions
 

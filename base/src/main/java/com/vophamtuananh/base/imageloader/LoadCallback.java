@@ -9,6 +9,6 @@ import android.support.annotation.Nullable;
 
 interface LoadCallback {
 
-    void completed(ImageHolder imageHolder, @Nullable Bitmap bitmap);
+    void completed(LoadInformationKeeper loadInformationKeeper, @Nullable Bitmap bitmap);
 
 }

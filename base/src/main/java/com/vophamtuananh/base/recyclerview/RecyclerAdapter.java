@@ -14,19 +14,24 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 /**
  * Created by vophamtuananh on 12/12/17.
  */
 
-public abstract class RecyclerAdapter<VH extends RecyclerAdapter.BHolder, T> extends RecyclerView.Adapter<VH> {
+public abstract class RecyclerAdapter<VH extends RecyclerAdapter.BaseHolder, T> extends RecyclerView.Adapter<VH> {
 
     private final List<T> itemList = new ArrayList<>();
 
-    private final ItemComparator<T> comparator;
+    private final ItemComparator<T> mComparator;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
+
+    private Disposable mCalculateDiffDisposable;
 
     public RecyclerAdapter() {
         this(null, null);
@@ -41,15 +46,24 @@ public abstract class RecyclerAdapter<VH extends RecyclerAdapter.BHolder, T> ext
     }
 
     public RecyclerAdapter(final ItemComparator<T> comparator, OnItemClickListener onItemClickListener) {
-        this.comparator = comparator;
-        this.onItemClickListener = onItemClickListener;
+        mComparator = comparator;
+        mOnItemClickListener = onItemClickListener;
     }
 
     protected abstract VH getViewHolder(ViewGroup parent, int viewType);
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(parent, viewType);
+        VH viewHolder = getViewHolder(parent, viewType);
+        if (viewHolder != null && mOnItemClickListener != null) {
+            viewHolder.boundView.getRoot().setOnClickListener(view -> {
+                int pos = viewHolder.getAdapterPosition();
+                if (pos != NO_POSITION) {
+                    mOnItemClickListener.onItemClick(view, pos);
+                }
+            });
+        }
+        return viewHolder;
     }
 
     @SuppressWarnings("unchecked")
@@ -89,7 +103,9 @@ public abstract class RecyclerAdapter<VH extends RecyclerAdapter.BHolder, T> ext
     }
 
     private void updateDiffItemsOnly(@NonNull final List<T> items) {
-        Single.fromCallable(() -> calculateDiff(items))
+        if (mCalculateDiffDisposable != null)
+            mCalculateDiffDisposable.dispose();
+        mCalculateDiffDisposable = Single.fromCallable(() -> calculateDiff(items))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(__ -> updateItemsInModel(items))
@@ -97,7 +113,7 @@ public abstract class RecyclerAdapter<VH extends RecyclerAdapter.BHolder, T> ext
     }
 
     private DiffUtil.DiffResult calculateDiff(@NonNull final List<T> newItems) {
-        return DiffUtil.calculateDiff(new DiffUtilCallback<>(itemList, newItems, comparator));
+        return DiffUtil.calculateDiff(new DiffUtilCallback<>(itemList, newItems, mComparator));
     }
 
     private void updateItemsInModel(@NonNull final List<T> items) {
@@ -109,15 +125,19 @@ public abstract class RecyclerAdapter<VH extends RecyclerAdapter.BHolder, T> ext
         result.dispatchUpdatesTo(this);
     }
 
-    public void release() {
-        onItemClickListener = null;
+    public List<T> getDatas() {
+        return itemList;
     }
 
-    public static class BHolder<V extends ViewDataBinding, T> extends RecyclerView.ViewHolder {
+    public void release() {
+        mOnItemClickListener = null;
+    }
+
+    public static class BaseHolder<V extends ViewDataBinding, T> extends RecyclerView.ViewHolder {
 
         protected V boundView;
 
-        public BHolder(V boundView) {
+        public BaseHolder(V boundView) {
             super(boundView.getRoot());
             this.boundView = boundView;
         }

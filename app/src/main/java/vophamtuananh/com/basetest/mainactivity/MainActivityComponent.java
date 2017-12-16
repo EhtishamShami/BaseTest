@@ -1,8 +1,7 @@
-package vophamtuananh.com.basetest;
-
-import com.vophamtuananh.base.imageloader.ImageLoader;
+package vophamtuananh.com.basetest.mainactivity;
 
 import dagger.Component;
+import vophamtuananh.com.basetest.TestApplicationComponent;
 
 /**
  * Created by vophamtuananh on 12/15/17.
@@ -12,5 +11,5 @@ import dagger.Component;
 @MainActivtyScope
 public interface MainActivityComponent {
 
-    ImageLoader getImageLoader();
+    void injectMainActivity(MainActivity mainActivity);
 }

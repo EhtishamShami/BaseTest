@@ -1,6 +1,7 @@
 package com.vophamtuananh.base.imageloader;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vophamtuananh.base.utils.FileUtil;
 
@@ -18,8 +19,6 @@ public class FileCacher {
     private static final String IMAGE_CACHE_DIR_NAME = "cached_image";
 
     private static final int MAX_SIZE = 209715200;
-
-    private static final FileSynchronizer mFileSynchronizer = new FileSynchronizer();
 
     private static final Object object = new Object();
 
@@ -41,13 +40,7 @@ public class FileCacher {
     }
 
     File getFile(String url) {
-        if (url == null)
-            return null;
         String filename = String.valueOf(url.hashCode());
-
-        while (mFileSynchronizer.isProcessing(filename)) {
-            mFileSynchronizer.waitUtilFileReleased(filename);
-        }
 
         return new File(cacheDir, filename);
     }
@@ -60,11 +53,6 @@ public class FileCacher {
             }
         }
 
-        while (mFileSynchronizer.isProcessing(file.getName())) {
-            mFileSynchronizer.waitUtilFileReleased(file.getName());
-        }
-        mFileSynchronizer.registerProcess(file.getName());
-
         final int buffer_size = 1024;
         FileOutputStream os = null;
 
@@ -72,6 +60,7 @@ public class FileCacher {
             if (file.exists())
                 file.delete();
             try {
+                long writtenByte = 0;
                 os = new FileOutputStream(file);
                 byte[] bytes = new byte[buffer_size];
                 for (; ; ) {
@@ -79,11 +68,12 @@ public class FileCacher {
                     if (count == -1)
                         break;
                     os.write(bytes, 0, count);
-
+                    writtenByte += count;
                 }
                 size += fileSize;
             } catch (Exception ex) {
-                file.deleteOnExit();
+                if (file.exists())
+                    file.delete();
             } finally {
                 if (os != null) {
                     try {
@@ -94,8 +84,6 @@ public class FileCacher {
                 }
             }
         }
-
-        mFileSynchronizer.unRegisterProcess(file.getName());
     }
 
     private synchronized void cleanDir(File dir, long bytes) {

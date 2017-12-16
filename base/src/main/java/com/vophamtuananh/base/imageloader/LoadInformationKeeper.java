@@ -8,7 +8,7 @@ import java.lang.ref.WeakReference;
  * Created by vophamtuananh on 12/13/17.
  */
 
-public class ImageHolder {
+public class LoadInformationKeeper {
 
     String url;
     int placeHolderId = 0;
@@ -20,7 +20,7 @@ public class ImageHolder {
     ScaleType scaleType = ScaleType.NOT_SCALE;
     BitmapCallback callback;
 
-    private ImageHolder() {
+    private LoadInformationKeeper() {
 
     }
 
@@ -31,51 +31,51 @@ public class ImageHolder {
     }
 
     public static class Builder {
-        ImageHolder imageHolder;
+        LoadInformationKeeper loadInformationKeeper;
 
         Builder() {
-            imageHolder = new ImageHolder();
+            loadInformationKeeper = new LoadInformationKeeper();
         }
 
         void url(String url) {
-            imageHolder.url = url;
+            loadInformationKeeper.url = url;
         }
 
         void placeHolderId(int placeHolderId) {
-            imageHolder.placeHolderId = placeHolderId;
+            loadInformationKeeper.placeHolderId = placeHolderId;
         }
 
         void errorHolderId(int errorHolderId) {
-            imageHolder.errorHolderId = errorHolderId;
+            loadInformationKeeper.errorHolderId = errorHolderId;
         }
 
         public void width(int width) {
-            imageHolder.width = width;
+            loadInformationKeeper.width = width;
         }
 
         public void height(int height) {
-            imageHolder.height = height;
+            loadInformationKeeper.height = height;
         }
 
         public void config(Bitmap.Config config) {
-            imageHolder.config = config;
+            loadInformationKeeper.config = config;
         }
 
         void scaleType(ScaleType scaleType) {
-            imageHolder.scaleType = scaleType;
+            loadInformationKeeper.scaleType = scaleType;
         }
 
         void callBack(BitmapCallback callback) {
-            imageHolder.callback = callback;
+            loadInformationKeeper.callback = callback;
         }
 
         void into(LoadingImageView imageView) {
-            imageHolder.imageViewWeakReference = new WeakReference<>(imageView);
+            loadInformationKeeper.imageViewWeakReference = new WeakReference<>(imageView);
         }
 
 
-        ImageHolder build() {
-            return imageHolder;
+        LoadInformationKeeper build() {
+            return loadInformationKeeper;
         }
     }
 
