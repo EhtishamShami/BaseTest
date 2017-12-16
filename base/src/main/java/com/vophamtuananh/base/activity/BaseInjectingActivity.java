@@ -1,5 +1,6 @@
 package com.vophamtuananh.base.activity;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +12,7 @@ import com.vophamtuananh.base.viewmodel.ActivityViewModel;
  * Created by vophamtuananh on 12/15/17.
  */
 
-public abstract class BaseInjectingActivity<B extends ViewDataBinding, VM extends ActivityViewModel<BaseActivity>, Component>
+public abstract class BaseInjectingActivity<B extends ViewDataBinding, VM extends ActivityViewModel<LifecycleOwner>, Component>
         extends BaseActivity<B, VM> {
 
     @Nullable

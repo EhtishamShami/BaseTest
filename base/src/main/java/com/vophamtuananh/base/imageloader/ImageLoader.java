@@ -97,13 +97,14 @@ public class ImageLoader {
         Context c = mContextWeakReference.get();
         if (c == null)
             return;
-        executorService.submit(new LoadImageRunnable(c, imgHolder,
-                (imageHolder, bitmap) -> {
-                    Context context = mContextWeakReference.get();
-                    if (context == null)
-                        return;
-                    preDisplaying(context, bitmap, imageHolder);
-                }));
+        executorService.submit(new LoadImageRunnable(c, imgHolder, new LoadCallback() {
+            @Override
+            public void completed(ImageHolder imageHolder, @Nullable Bitmap bitmap) {
+                Context context = mContextWeakReference.get();
+                if (context == null)
+                    return;
+                preDisplaying(context, bitmap, imageHolder);
+            }}));
     }
 
     protected Bitmap reprocessBitmap(@NonNull Bitmap bitmap) {

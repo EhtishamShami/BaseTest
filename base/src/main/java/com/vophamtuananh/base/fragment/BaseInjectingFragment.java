@@ -1,5 +1,6 @@
 package com.vophamtuananh.base.fragment;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
@@ -11,7 +12,7 @@ import com.vophamtuananh.base.viewmodel.FragmentViewModel;
  * Created by vophamtuananh on 12/15/17.
  */
 
-public abstract class BaseInjectingFragment<B extends ViewDataBinding, VM extends FragmentViewModel<BaseFragment>, Component>
+public abstract class BaseInjectingFragment<B extends ViewDataBinding, VM extends FragmentViewModel<LifecycleOwner>, Component>
         extends BaseFragment<B, VM> {
 
     @Nullable

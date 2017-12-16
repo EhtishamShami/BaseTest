@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
  * Created by vophamtuananh on 12/3/17.
  */
 
-public abstract class BaseFragment<B extends ViewDataBinding, VM extends FragmentViewModel<BaseFragment>> extends Fragment implements LifecycleOwner {
+public abstract class BaseFragment<B extends ViewDataBinding, VM extends FragmentViewModel<LifecycleOwner>> extends Fragment implements LifecycleOwner {
 
     protected B mViewDataBinding;
 

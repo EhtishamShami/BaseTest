@@ -25,7 +25,9 @@ final class FileSynchronizer {
     void unRegisterProcess(String fileName) {
         synchronized (this) {
             if (mProcessingFiles.containsKey(fileName)) {
-                mProcessingFiles.get(fileName).notifyAll();
+                synchronized (mProcessingFiles.get(fileName)) {
+                    mProcessingFiles.get(fileName).notifyAll();
+                }
                 mProcessingFiles.remove(fileName);
             }
         }

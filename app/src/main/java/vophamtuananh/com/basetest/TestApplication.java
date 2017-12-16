@@ -3,6 +3,9 @@ package vophamtuananh.com.basetest;
 import android.app.Activity;
 import android.app.Application;
 
+import com.vophamtuananh.base.imageloader.ImageLoader;
+import com.vophamtuananh.base.injection.modules.ContextModule;
+
 /**
  * Created by vophamtuananh on 12/15/17.
  */
@@ -19,6 +22,16 @@ public class TestApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        component = DaggerTestApplicationComponent().builder().
+        component = DaggerTestApplicationComponent.builder()
+                .contextModule(new ContextModule(this)).build();
+
+    }
+
+    public TestApplicationComponent component() {
+        return component;
+    }
+
+    public ImageLoader getImageLoader() {
+        return component.getImageloader();
     }
 }

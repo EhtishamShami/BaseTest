@@ -87,7 +87,7 @@ public class LoadImageRunnable implements Runnable {
     }
 
     private Bitmap decodeFile(File file, ImageHolder imageHolder) {
-        Bitmap bitmap = BitmapUtil.getBitmapFromFile(file, imageHolder.config);
+        Bitmap bitmap = BitmapUtil.getBitmapFromCachedFile(file, imageHolder.config);
         switch (imageHolder.scaleType) {
             case CROP:
                 return crop(bitmap, imageHolder.width, imageHolder.height);

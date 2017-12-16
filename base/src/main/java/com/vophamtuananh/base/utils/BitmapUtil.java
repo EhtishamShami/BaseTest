@@ -44,6 +44,12 @@ public class BitmapUtil {
         }
     }
 
+    public static Bitmap getBitmapFromCachedFile(File file, Bitmap.Config bitmapConfig) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = bitmapConfig;
+        return BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
+    }
+
     public static Bitmap getBitmapFromFile(File file, Bitmap.Config bitmapConfig) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = bitmapConfig;
