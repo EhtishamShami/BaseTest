@@ -1,88 +1,60 @@
 package vophamtuananh.com.basetest.mainactivity;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
-import com.vophamtuananh.base.activity.BaseActivity;
 import com.vophamtuananh.base.imageloader.ImageLoader;
 import com.vophamtuananh.base.recyclerview.RecyclerAdapter;
-import com.vophamtuananh.base.viewmodel.ActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.inject.Inject;
 
+import vophamtuananh.com.basetest.NormalApplication;
 import vophamtuananh.com.basetest.R;
-import vophamtuananh.com.basetest.MyApplication;
-import vophamtuananh.com.basetest.databinding.ActivityMainBinding;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, ActivityViewModel<LifecycleOwner>> implements RecyclerAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnItemClickListener {
 
-    @Inject
-    ImageLoader imageLoader;
-
-    @Inject
+    //@Inject
     ImageAdapter imageAdapter;
-
-    int index = 0;
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_main;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        MainActivityComponent component = DaggerMainActivityComponent.builder()
+        /*MainActivityComponent component = DaggerMainActivityComponent.builder()
                 .mainActivityModule(new MainActivityModule(this))
                 .myApplicationComponent(MyApplication.get(this).component())
-                .build();
+                .build();*/
 
-        component.injectMainActivity(this);
+        //component.injectMainActivity(this);
 
+        ImageComparator imageComparator = new ImageComparator();
 
-        mViewDataBinding.rvImage.setAdapter(imageAdapter);
+        ImageLoader imageLoader = NormalApplication.get(this).imageLoader();
+
+        imageAdapter = new ImageAdapter(imageComparator, this, imageLoader);
+
+        RecyclerView recyclerView = findViewById(R.id.rv_image);
+
+        recyclerView.setAdapter(imageAdapter);
+
         imageAdapter.update(new ArrayList<>(Arrays.asList(images1)));
 
-        mViewDataBinding.btnChange.setOnClickListener(view -> {
-            if (index == 0) {
-                imageAdapter.update(new ArrayList<>(Arrays.asList(images2)));
-                index = 1;
-            } else {
-                imageAdapter.appenItems(new ArrayList<>(Arrays.asList(images1)));
-                index = 0;
-            }
-        });
     }
 
     @Override
     public void onItemClick(View v, int position) {
-        imageLoader.load(imageAdapter.getDatas().get(position)).into(mViewDataBinding.ivImage);
+        Toast.makeText(this, "Clicked on: " + position, Toast.LENGTH_SHORT).show();
     }
 
     private String[] images1 = {
             "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
             "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png"
-    };
-
-    private String[] images2 = {
             "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
             "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
             "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",

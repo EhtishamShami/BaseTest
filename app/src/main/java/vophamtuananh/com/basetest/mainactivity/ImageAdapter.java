@@ -1,15 +1,11 @@
 package vophamtuananh.com.basetest.mainactivity;
 
-import android.databinding.BindingAdapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.vophamtuananh.base.imageloader.ImageLoader;
 import com.vophamtuananh.base.recyclerview.RecyclerAdapter;
 
-import javax.inject.Inject;
-
-import vophamtuananh.com.basetest.MyLoadingImageView;
 import vophamtuananh.com.basetest.databinding.ItemImageBinding;
 
 /**
@@ -18,9 +14,9 @@ import vophamtuananh.com.basetest.databinding.ItemImageBinding;
 
 public class ImageAdapter extends RecyclerAdapter<ImageAdapter.LoadImageHolder, String> {
 
-    private static ImageLoader mImageLoader;
+    private ImageLoader mImageLoader;
 
-    @Inject
+    //@Inject
     public ImageAdapter(ImageComparator comparator, OnItemClickListener onItemClickListener, ImageLoader imageLoader) {
         super(comparator, onItemClickListener);
         mImageLoader = imageLoader;
@@ -29,18 +25,22 @@ public class ImageAdapter extends RecyclerAdapter<ImageAdapter.LoadImageHolder, 
     @Override
     protected LoadImageHolder getViewHolder(ViewGroup parent, int viewType) {
         ItemImageBinding itemImageBinding = ItemImageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new LoadImageHolder(itemImageBinding);
+        return new LoadImageHolder(itemImageBinding, mImageLoader);
     }
 
     public static class LoadImageHolder extends RecyclerAdapter.BaseHolder<ItemImageBinding, String> {
 
-        public LoadImageHolder(ItemImageBinding boundView) {
-            super(boundView);
-        }
-    }
+        private ImageLoader imageLoader;
 
-    @BindingAdapter("app:load_image")
-    public static void loadImage(MyLoadingImageView imageView, String imageUrl) {
-        mImageLoader.load(imageUrl).into(imageView);
+        LoadImageHolder(ItemImageBinding boundView, ImageLoader imageLoader) {
+            super(boundView);
+            this.imageLoader = imageLoader;
+        }
+
+        @Override
+        protected void bindData(String model) {
+            super.bindData(model);
+            imageLoader.load(model).into(boundView.ivImage);
+        }
     }
 }

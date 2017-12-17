@@ -7,12 +7,6 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <vophamtuananh.com.basetest.MyLoadingImageView
-            android:id="@+id/iv_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_margin="5dp"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_image"
             android:background="#CCCCCC"
@@ -20,12 +14,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
-
-        <Button
-            android:id="@+id/btn_change"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CHANGE"/>
 
     </LinearLayout>
 

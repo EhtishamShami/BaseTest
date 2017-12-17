@@ -31,7 +31,4 @@ public class MyApplication extends Application {
         return component;
     }
 
-    public ImageLoader getImageLoader() {
-        return component.getImageloader();
-    }
 }
