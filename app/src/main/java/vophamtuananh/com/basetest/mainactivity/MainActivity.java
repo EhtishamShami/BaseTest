@@ -15,7 +15,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 import vophamtuananh.com.basetest.R;
-import vophamtuananh.com.basetest.TestApplication;
+import vophamtuananh.com.basetest.MyApplication;
 import vophamtuananh.com.basetest.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, ActivityViewModel<LifecycleOwner>> implements RecyclerAdapter.OnItemClickListener {
@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, ActivityView
 
         MainActivityComponent component = DaggerMainActivityComponent.builder()
                 .mainActivityModule(new MainActivityModule(this))
-                .testApplicationComponent(TestApplication.get(this).component())
+                .myApplicationComponent(MyApplication.get(this).component())
                 .build();
 
         component.injectMainActivity(this);

@@ -7,7 +7,7 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <vophamtuananh.com.basetest.TestLoadingImageView
+        <vophamtuananh.com.basetest.MyLoadingImageView
             android:id="@+id/iv_image"
             android:layout_width="200dp"
             android:layout_height="200dp"

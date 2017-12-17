@@ -9,7 +9,7 @@
             type="String" />
     </data>
 
-    <vophamtuananh.com.basetest.TestLoadingImageView
+    <vophamtuananh.com.basetest.MyLoadingImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="5dp"

@@ -1,7 +1,5 @@
 package vophamtuananh.com.basetest.mainactivity;
 
-import com.vophamtuananh.base.imageloader.ImageLoader;
-import com.vophamtuananh.base.recyclerview.ItemComparator;
 import com.vophamtuananh.base.recyclerview.RecyclerAdapter;
 
 import dagger.Module;

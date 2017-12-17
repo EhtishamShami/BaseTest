@@ -5,12 +5,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.vophamtuananh.base.imageloader.ImageLoader;
-import com.vophamtuananh.base.recyclerview.ItemComparator;
 import com.vophamtuananh.base.recyclerview.RecyclerAdapter;
 
 import javax.inject.Inject;
 
-import vophamtuananh.com.basetest.TestLoadingImageView;
+import vophamtuananh.com.basetest.MyLoadingImageView;
 import vophamtuananh.com.basetest.databinding.ItemImageBinding;
 
 /**
@@ -41,7 +40,7 @@ public class ImageAdapter extends RecyclerAdapter<ImageAdapter.LoadImageHolder, 
     }
 
     @BindingAdapter("app:load_image")
-    public static void loadImage(TestLoadingImageView imageView, String imageUrl) {
+    public static void loadImage(MyLoadingImageView imageView, String imageUrl) {
         mImageLoader.load(imageUrl).into(imageView);
     }
 }

@@ -13,18 +13,18 @@ import com.vophamtuananh.base.imageloader.LoadingImageView;
  * Created by vophamtuananh on 12/15/17.
  */
 
-public class TestLoadingImageView extends AppCompatImageView implements LoadingImageView {
+public class MyLoadingImageView extends AppCompatImageView implements LoadingImageView {
 
 
-    public TestLoadingImageView(Context context) {
+    public MyLoadingImageView(Context context) {
         super(context);
     }
 
-    public TestLoadingImageView(Context context, @Nullable AttributeSet attrs) {
+    public MyLoadingImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public TestLoadingImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyLoadingImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

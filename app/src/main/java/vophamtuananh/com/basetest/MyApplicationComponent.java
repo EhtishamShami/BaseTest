@@ -12,7 +12,7 @@ import dagger.Component;
 
 @ApplicationScope
 @Component(modules = ImageLoaderModule.class)
-public interface TestApplicationComponent {
+public interface MyApplicationComponent {
 
     ImageLoader getImageloader();
 }
