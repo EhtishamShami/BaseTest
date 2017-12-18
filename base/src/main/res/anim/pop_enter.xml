@@ -1,4 +1,7 @@
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/decelerate_interpolator"
+    android:duration="@integer/animation_time_full"
+    android:shareInterpolator="true" >
 
     <scale  android:duration="70"
         android:pivotX="50%"
@@ -12,8 +15,8 @@
         android:duration="200"
         android:startOffset="70"
         android:fromXDelta="0%"
-        android:fromYDelta="0%"
-        android:toXDelta="-100%"
+        android:fromYDelta="-100%"
+        android:toXDelta="0%"
         android:toYDelta="0%" />
 
     <scale  android:duration="130"

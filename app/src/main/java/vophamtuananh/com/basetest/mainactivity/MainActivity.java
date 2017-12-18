@@ -1,73 +1,77 @@
 package vophamtuananh.com.basetest.mainactivity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
 
-import com.vophamtuananh.base.imageloader.ImageLoader;
-import com.vophamtuananh.base.recyclerview.RecyclerAdapter;
+import com.vophamtuananh.base.fragment.BaseFragment;
+import com.vophamtuananh.base.fragment.BaseFragmentHelper;
+import com.vophamtuananh.base.fragment.FragmentProvider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import javax.inject.Inject;
 
-
-import vophamtuananh.com.basetest.NormalApplication;
+import vophamtuananh.com.basetest.MyApplication;
 import vophamtuananh.com.basetest.R;
+import vophamtuananh.com.basetest.fragment.Fragment1;
+import vophamtuananh.com.basetest.fragment.Fragment2;
+import vophamtuananh.com.basetest.fragment.PushFragment;
 
-public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements FragmentProvider<BaseFragment> {
 
-    //@Inject
-    ImageAdapter imageAdapter;
+    @Inject
+    BaseFragmentHelper<BaseFragment> fragmentHelper;
+
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*MainActivityComponent component = DaggerMainActivityComponent.builder()
+        MainActivityComponent component = DaggerMainActivityComponent.builder()
                 .mainActivityModule(new MainActivityModule(this))
                 .myApplicationComponent(MyApplication.get(this).component())
-                .build();*/
+                .build();
 
-        //component.injectMainActivity(this);
+        component.injectMainActivity(this);
 
-        ImageComparator imageComparator = new ImageComparator();
+        Button button = findViewById(R.id.btn_switch);
+        button.setOnClickListener(view -> {
+            if (index == 0) {
+                fragmentHelper.showFragment(1);
+                index = 1;
+            } else {
+                fragmentHelper.showFragment(0);
+                index = 0;
+            }
+        });
 
-        ImageLoader imageLoader = NormalApplication.get(this).imageLoader();
-
-        imageAdapter = new ImageAdapter(imageComparator, this, imageLoader);
-
-        RecyclerView recyclerView = findViewById(R.id.rv_image);
-
-        recyclerView.setAdapter(imageAdapter);
-
-        imageAdapter.update(new ArrayList<>(Arrays.asList(images1)));
-
+        Button buttonPush = findViewById(R.id.btn_push);
+        buttonPush.setOnClickListener(view -> {
+            fragmentHelper.pushFragment(new PushFragment());
+        });
     }
 
     @Override
-    public void onItemClick(View v, int position) {
-        Toast.makeText(this, "Clicked on: " + position, Toast.LENGTH_SHORT).show();
+    public void onBackPressed() {
+        if (fragmentHelper.popFragment())
+            return;
+        super.onBackPressed();
     }
 
-    private String[] images1 = {
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png",
-            "http://admin.minimomentsapp.com//FileUpload/Background/Background_Boho_Announcement_20173207A073211.142452.png"
-    };
+    @Override
+    public BaseFragment[] getFragments() {
+        return new BaseFragment[]{new Fragment1(), new Fragment2()};
+    }
 
+    @Override
+    public int getContentLayoutId() {
+        return R.id.fl_content;
+    }
+
+    @Override
+    public FragmentManager fragmentManager() {
+        return getSupportFragmentManager();
+    }
 }

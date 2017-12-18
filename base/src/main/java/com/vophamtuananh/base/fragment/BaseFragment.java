@@ -1,6 +1,5 @@
 package com.vophamtuananh.base.fragment;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -17,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.vophamtuananh.base.R;
+import com.vophamtuananh.base.viewmodel.CommonView;
 import com.vophamtuananh.base.viewmodel.FragmentViewModel;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
  * Created by vophamtuananh on 12/3/17.
  */
 
-public abstract class BaseFragment<B extends ViewDataBinding, VM extends FragmentViewModel<LifecycleOwner>> extends Fragment implements LifecycleOwner {
+public abstract class BaseFragment<B extends ViewDataBinding, VM extends FragmentViewModel> extends Fragment implements CommonView {
 
     protected B mViewDataBinding;
 
@@ -63,14 +63,14 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends Fragmen
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         Animation animation;
         if (mIsCurrentScreen) {
-            int out = getPopDownAnimId();
-            int in = getPopUpAnimId();
-            int push_exit = getPushExitAnimId();
-            int push_enter = getPushEnterAnimId();
+            int popExit = getPopExitAnimId();
+            int pushEnter = getPushEnterAnimId();
+            int pushExit = getPushExitAnimId();
+            int popEnter = getPopEnterAnimId();
             if (mIsPush)
-                animation = AnimationUtils.loadAnimation(getContext(), enter ? in : push_exit);
+                animation = AnimationUtils.loadAnimation(getContext(), enter ? pushEnter : pushExit);
             else
-                animation = AnimationUtils.loadAnimation(getContext(), enter ? push_enter : out);
+                animation = AnimationUtils.loadAnimation(getContext(), enter ? popEnter : popExit);
         } else {
             if (enter) {
                 int left = getLeftInAnimId();
@@ -79,14 +79,16 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends Fragmen
                     if (left == 0) {
                         animation = new AlphaAnimation(1, 1);
                         animation.setDuration(getResources().getInteger(R.integer.animation_time_full));
-                    } else
+                    } else {
                         animation = AnimationUtils.loadAnimation(getContext(), left);
+                    }
                 } else {
                     if (right == 0) {
                         animation = new AlphaAnimation(1, 1);
                         animation.setDuration(getResources().getInteger(R.integer.animation_time_full));
-                    } else
+                    } else {
                         animation = AnimationUtils.loadAnimation(getContext(), right);
+                    }
                 }
             } else {
                 int left = getLeftOutAnimId();
@@ -165,6 +167,21 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends Fragmen
         super.onDestroyView();
     }
 
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
     public boolean isInitialized() {
         return mInitialized;
     }
@@ -197,10 +214,6 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends Fragmen
         return mShouldSave;
     }
 
-    public void setShouldSave(boolean shouldSave) {
-        this.mShouldSave = shouldSave;
-    }
-
     protected void onVisible() {}
 
     protected void handleAfterVisible() {}
@@ -212,19 +225,19 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends Fragmen
     public void onChoseImage(Uri uri) {}
 
     protected int getPushExitAnimId() {
-        return mShouldSave ? R.anim.slide_out_left : R.anim.slide_fade_out_left;
+        return R.anim.push_exit;
+    }
+
+    protected int getPopEnterAnimId() {
+        return R.anim.pop_enter;
+    }
+
+    protected int getPopExitAnimId() {
+        return R.anim.pop_exit;
     }
 
     protected int getPushEnterAnimId() {
-        return mShouldSave ? R.anim.slide_in_left : R.anim.slide_fade_in_left;
-    }
-
-    protected int getPopDownAnimId() {
-        return mShouldSave ? R.anim.slide_out_right : R.anim.slide_fade_out_right;
-    }
-
-    protected int getPopUpAnimId() {
-        return mShouldSave ? R.anim.slide_in_right : R.anim.slide_fade_in_right;
+        return R.anim.push_enter;
     }
 
     protected int getLeftInAnimId() {return R.anim.slide_in_left;}

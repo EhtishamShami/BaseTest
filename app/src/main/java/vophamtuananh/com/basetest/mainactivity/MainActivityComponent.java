@@ -8,7 +8,7 @@ import vophamtuananh.com.basetest.MyApplicationComponent;
  */
 
 @Component(modules = MainActivityModule.class, dependencies = MyApplicationComponent.class)
-@MainActivtyScope
+@MainActivityScope
 public interface MainActivityComponent {
 
     void injectMainActivity(MainActivity mainActivity);

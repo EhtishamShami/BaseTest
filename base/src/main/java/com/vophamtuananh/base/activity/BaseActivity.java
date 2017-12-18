@@ -25,6 +25,7 @@ import com.vophamtuananh.base.dialog.LoadingDialog;
 import com.vophamtuananh.base.utils.DeviceUtil;
 import com.vophamtuananh.base.utils.FileUtil;
 import com.vophamtuananh.base.viewmodel.ActivityViewModel;
+import com.vophamtuananh.base.viewmodel.CommonView;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +42,7 @@ import static com.vophamtuananh.base.utils.DeviceUtil.PERMISSION_WRITE_STORAGE_R
  * Created by vophamtuananh on 12/2/17.
  */
 
-public abstract class BaseActivity<B extends ViewDataBinding, VM extends ActivityViewModel<LifecycleOwner>> extends AppCompatActivity implements LifecycleOwner {
+public abstract class BaseActivity<B extends ViewDataBinding, VM extends ActivityViewModel> extends AppCompatActivity implements CommonView {
 
     protected B mViewDataBinding;
 
@@ -190,6 +191,21 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends Activit
         } else if (requestCode == GALLERY_REQUEST_CODE) {
             onChoseNoImage();
         }
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError() {
+
     }
 
     public void openCamera() {

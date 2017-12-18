@@ -6,6 +6,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -17,7 +18,7 @@ import io.reactivex.disposables.Disposable;
  * Created by vophamtuananh on 12/3/17.
  */
 
-public class FragmentViewModel<V extends LifecycleOwner> extends ViewModel implements LifecycleObserver {
+public class FragmentViewModel<V extends CommonView> extends ViewModel implements LifecycleObserver {
 
     @Nullable
     private volatile WeakReference<V> mViewWeakReference;
@@ -32,7 +33,7 @@ public class FragmentViewModel<V extends LifecycleOwner> extends ViewModel imple
         return viewWeakReference.get();
     }
 
-    public void onCreated(V view) {
+    public void onCreated(@NonNull V view) {
         mViewWeakReference = new WeakReference<>(view);
         if (compositeDisposables == null)
             compositeDisposables = new CompositeDisposable();

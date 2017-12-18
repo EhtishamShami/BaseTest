@@ -10,8 +10,8 @@ public interface FragmentProvider<T extends BaseFragment> {
 
     T[] getFragments();
 
-    int getFragmentLayoutId();
+    int getContentLayoutId();
 
-    FragmentManager getFragmentManager();
+    FragmentManager fragmentManager();
 
 }

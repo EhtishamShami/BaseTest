@@ -12,7 +12,7 @@ import com.vophamtuananh.base.viewmodel.ActivityViewModel;
  * Created by vophamtuananh on 12/15/17.
  */
 
-public abstract class BaseInjectingActivity<B extends ViewDataBinding, VM extends ActivityViewModel<LifecycleOwner>, Component>
+public abstract class BaseInjectingActivity<B extends ViewDataBinding, VM extends ActivityViewModel, Component>
         extends BaseActivity<B, VM> {
 
     @Nullable

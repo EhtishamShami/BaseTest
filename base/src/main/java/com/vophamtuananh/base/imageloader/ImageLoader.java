@@ -30,8 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ImageLoader {
 
-    private static final int FADE_IN_TIME = 400;
-
     private static final int CORE_POOL_SIZE = 5;
 
     private static final int MAXIMUM_POOL_SIZE = 128;
@@ -187,9 +185,7 @@ public class ImageLoader {
             return;
 
         if (drawable != null) {
-            final TransitionDrawable td = new TransitionDrawable(new Drawable[]{new ColorDrawable(TRANSPARENT_COLOR), drawable});
-            loadingImageView.setDrawable(td);
-            td.startTransition(FADE_IN_TIME);
+            loadingImageView.setDrawable(drawable);
         } else {
             loadingImageView.setResourceId(loadInformationKeeper.errorHolderId);
         }

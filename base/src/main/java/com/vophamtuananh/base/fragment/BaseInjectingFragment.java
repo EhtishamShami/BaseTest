@@ -12,7 +12,7 @@ import com.vophamtuananh.base.viewmodel.FragmentViewModel;
  * Created by vophamtuananh on 12/15/17.
  */
 
-public abstract class BaseInjectingFragment<B extends ViewDataBinding, VM extends FragmentViewModel<LifecycleOwner>, Component>
+public abstract class BaseInjectingFragment<B extends ViewDataBinding, VM extends FragmentViewModel, Component>
         extends BaseFragment<B, VM> {
 
     @Nullable

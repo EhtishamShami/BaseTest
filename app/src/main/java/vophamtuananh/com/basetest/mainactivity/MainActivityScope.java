@@ -3,9 +3,9 @@ package vophamtuananh.com.basetest.mainactivity;
 import javax.inject.Scope;
 
 /**
- * Created by vophamtuananh on 12/15/17.
+ * Created by vophamtuananh on 12/18/17.
  */
 
 @Scope
-public @interface MainActivtyScope {
+public @interface MainActivityScope {
 }

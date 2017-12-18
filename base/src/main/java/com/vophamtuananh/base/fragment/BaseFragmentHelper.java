@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 /**
  * Created by vophamtuananh on 12/5/17.
  */
@@ -21,9 +23,10 @@ public class BaseFragmentHelper<T extends BaseFragment> {
 
     private OnChangedFragmentListener mOnChangedFragmentListener;
 
+    @Inject
     public BaseFragmentHelper(FragmentProvider<T> fragmentProvider, int shouldShowPosition) {
-        this.mLayoutId = fragmentProvider.getFragmentLayoutId();
-        this.mFragmentManager = fragmentProvider.getFragmentManager();
+        this.mLayoutId = fragmentProvider.getContentLayoutId();
+        this.mFragmentManager = fragmentProvider.fragmentManager();
         this.mBuildFragments = fragmentProvider.getFragments();
         initFragments(mBuildFragments, shouldShowPosition);
     }

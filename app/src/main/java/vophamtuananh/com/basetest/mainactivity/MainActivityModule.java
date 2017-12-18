@@ -1,6 +1,7 @@
 package vophamtuananh.com.basetest.mainactivity;
 
-import com.vophamtuananh.base.recyclerview.RecyclerAdapter;
+import com.vophamtuananh.base.fragment.BaseFragment;
+import com.vophamtuananh.base.fragment.FragmentProvider;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,8 +20,12 @@ public class MainActivityModule {
     }
 
     @Provides
-    @MainActivtyScope
-    public RecyclerAdapter.OnItemClickListener onItemClickListener() {
+    public FragmentProvider<BaseFragment> fragmentProvider() {
         return mainActivity;
+    }
+
+    @Provides
+    public int shouldPosition() {
+        return 0;
     }
 }
