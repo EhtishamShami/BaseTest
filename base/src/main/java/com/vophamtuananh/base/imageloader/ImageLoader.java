@@ -3,13 +3,10 @@ package com.vophamtuananh.base.imageloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.LruCache;
 
 import java.lang.ref.WeakReference;
@@ -36,8 +33,6 @@ public class ImageLoader {
 
     private static final int KEEP_ALIVE_TIME = 1;
 
-    private static int TRANSPARENT_COLOR;
-
     private static final FileSynchronizer mFileSynchronizer = new FileSynchronizer();
 
     private static List<LoadInformationKeeper> mWaitingKeepers = new ArrayList<>();
@@ -46,7 +41,7 @@ public class ImageLoader {
 
     private static ThreadPoolExecutor executorService;
 
-    private static final Map<LoadingImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<LoadingImageView, String>());
+    private static final Map<ILoadingImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ILoadingImageView, String>());
 
     private static Handler handler = new Handler();
 
@@ -55,7 +50,6 @@ public class ImageLoader {
     private LoadInformationKeeper.Builder builder;
 
     public ImageLoader(Context context) {
-        TRANSPARENT_COLOR = ContextCompat.getColor(context, android.R.color.transparent);
 
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>() {};
         executorService = new ThreadPoolExecutor(
@@ -77,14 +71,14 @@ public class ImageLoader {
     }
 
     private boolean show(LoadInformationKeeper loadInformationKeeper) {
-        LoadingImageView loadingImageView = loadInformationKeeper.getLoadingImageView();
-        if (loadingImageView != null) {
+        ILoadingImageView ILoadingImageView = loadInformationKeeper.getLoadingImageView();
+        if (ILoadingImageView != null) {
             if (loadInformationKeeper.url == null) {
-                loadingImageView.setResourceId(loadInformationKeeper.errorHolderId);
+                ILoadingImageView.setResourceId(loadInformationKeeper.errorHolderId);
                 return true;
             }
 
-            imageViews.put(loadingImageView, loadInformationKeeper.url);
+            imageViews.put(ILoadingImageView, loadInformationKeeper.url);
 
             String fileName = String.valueOf(loadInformationKeeper.url.hashCode());
             if (mFileSynchronizer.isProcessing(fileName)) {
@@ -98,12 +92,12 @@ public class ImageLoader {
 
             BitmapDrawable bitmapDrawable = memoryCache.get(loadInformationKeeper.url + "-" + loadInformationKeeper.width + "-" + loadInformationKeeper.height);
             if (bitmapDrawable != null) {
-                loadingImageView.setDrawable(bitmapDrawable);
-                loadingImageView.hideLoading();
+                ILoadingImageView.setDrawable(bitmapDrawable);
+                ILoadingImageView.hideLoading();
             } else {
                 mFileSynchronizer.registerProcess(fileName);
                 queueDownloadPhoto(loadInformationKeeper);
-                loadingImageView.showLoading();
+                ILoadingImageView.showLoading();
             }
         }
         return true;
@@ -180,23 +174,23 @@ public class ImageLoader {
     }
 
     private void setImageDrawable(@NonNull LoadInformationKeeper loadInformationKeeper, @Nullable Drawable drawable) {
-        LoadingImageView loadingImageView = loadInformationKeeper.getLoadingImageView();
-        if (loadingImageView == null)
+        ILoadingImageView ILoadingImageView = loadInformationKeeper.getLoadingImageView();
+        if (ILoadingImageView == null)
             return;
 
         if (drawable != null) {
-            loadingImageView.setDrawable(drawable);
+            ILoadingImageView.setDrawable(drawable);
         } else {
-            loadingImageView.setResourceId(loadInformationKeeper.errorHolderId);
+            ILoadingImageView.setResourceId(loadInformationKeeper.errorHolderId);
         }
 
-        loadingImageView.hideLoading();
+        ILoadingImageView.hideLoading();
     }
 
     private boolean imageViewReused(LoadInformationKeeper loadInformationKeeper) {
-        LoadingImageView loadingImageView = loadInformationKeeper.getLoadingImageView();
-        if (loadingImageView != null) {
-            String tag = imageViews.get(loadingImageView);
+        ILoadingImageView ILoadingImageView = loadInformationKeeper.getLoadingImageView();
+        if (ILoadingImageView != null) {
+            String tag = imageViews.get(ILoadingImageView);
             return tag == null || !tag.equals(loadInformationKeeper.url);
         }
         return true;
@@ -248,8 +242,8 @@ public class ImageLoader {
         return this;
     }
 
-    public void into(LoadingImageView loadingImageView) {
-        builder.into(loadingImageView);
+    public void into(ILoadingImageView ILoadingImageView) {
+        builder.into(ILoadingImageView);
         show(builder.build());
     }
 }

@@ -5,26 +5,25 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-import com.vophamtuananh.base.imageloader.LoadingImageView;
+import com.vophamtuananh.base.imageloader.ILoadingImageView;
 
 /**
  * Created by vophamtuananh on 12/15/17.
  */
 
-public class MyLoadingImageView extends AppCompatImageView implements LoadingImageView {
+public class MyILoadingImageView extends AppCompatImageView implements ILoadingImageView {
 
 
-    public MyLoadingImageView(Context context) {
+    public MyILoadingImageView(Context context) {
         super(context);
     }
 
-    public MyLoadingImageView(Context context, @Nullable AttributeSet attrs) {
+    public MyILoadingImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyLoadingImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyILoadingImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

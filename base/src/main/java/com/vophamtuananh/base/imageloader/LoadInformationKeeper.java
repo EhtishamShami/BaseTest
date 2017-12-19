@@ -13,7 +13,7 @@ public class LoadInformationKeeper {
     String url;
     int placeHolderId = 0;
     int errorHolderId = android.R.drawable.stat_notify_error;
-    WeakReference<LoadingImageView> imageViewWeakReference;
+    WeakReference<ILoadingImageView> imageViewWeakReference;
     public int width;
     public int height;
     Bitmap.Config config = Bitmap.Config.RGB_565;
@@ -24,7 +24,7 @@ public class LoadInformationKeeper {
 
     }
 
-    LoadingImageView getLoadingImageView() {
+    ILoadingImageView getLoadingImageView() {
         if (imageViewWeakReference == null)
             return null;
         return imageViewWeakReference.get();
@@ -69,7 +69,7 @@ public class LoadInformationKeeper {
             loadInformationKeeper.callback = callback;
         }
 
-        void into(LoadingImageView imageView) {
+        void into(ILoadingImageView imageView) {
             loadInformationKeeper.imageViewWeakReference = new WeakReference<>(imageView);
         }
 
